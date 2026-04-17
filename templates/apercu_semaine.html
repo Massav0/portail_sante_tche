@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Menu Semaine – {{ patient_nom }} | Santé-Tché</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800;900&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;500;600&display=swap');
+  
+  :root {
+    --dark-green: #1b4d1b;
+    --mid-green: #2e7d32;
+    --accent: #4caf50;
+    --accent-light: #81c784;
+    --light-bg: #e8f0e8;
+    --white: #ffffff;
+    --text: #222;
+    --card-shadow: 0 4px 20px rgba(27,77,27,0.14);
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #c5d9c5 0%, #b8d0b8 40%, #a8c5a8 100%);
+  }
+
+  body {
+    font-family: 'Open Sans', sans-serif;
+  }
+
+  @page {
+    size: A4;
+    margin: 0;
+  }
+
+  .jour-page {
+    width: 210mm;
+    height: 297mm;
+    display: flex;
+    flex-direction: column;
+    page-break-after: always;
+    background: var(--white);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+  }
+
+  /* TOPBAR */
+  .topbar {
+    background: var(--dark-green);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 5%;
+    border-bottom: 3px solid var(--accent);
+  }
+
+  .topbar-date {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 1rem;
+    color: var(--white);
+    letter-spacing: 3px;
+  }
+
+  .topbar-date::after {
+    content: '';
+    display: block;
+    height: 3px;
+    background: var(--accent);
+    border-radius: 2px;
+    margin-top: 2px;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--white);
+  }
+
+  .brand-logo {
+    width: 42px;
+    height: 42px;
+    background: linear-gradient(135deg, var(--accent-light), var(--accent));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+  }
+
+  .brand-label strong {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    font-weight: 800;
+    display: block;
+  }
+
+  .brand-label span {
+    font-size: 0.68rem;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  /* HERO */
+  .hero {
+    background: var(--dark-green);
+    text-align: center;
+    padding: 30px 20px 35px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-dots {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: radial-gradient(rgba(76, 175, 80, 0.12) 1px, transparent 1px);
+    background-size: 20px 20px;
+    pointer-events: none;
+  }
+
+  .hero-inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 22px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .star {
+    width: 42px;
+    height: 42px;
+    background: linear-gradient(135deg, var(--accent-light), var(--accent));
+    clip-path: polygon(50% 0%, 59% 38%, 100% 38%, 68% 59%, 79% 100%, 50% 75%, 21% 100%, 32% 59%, 0% 38%, 41% 38%);
+  }
+
+  .day-title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900;
+    font-size: 3rem;
+    color: var(--white);
+    letter-spacing: -2px;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  .menu-label {
+    color: rgba(255, 255, 255, 0.75);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 8px;
+    text-transform: uppercase;
+    margin-top: 8px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 10px;
+  }
+
+  .hero-divider span {
+    display: block;
+    height: 2px;
+    width: 50px;
+    background: linear-gradient(90deg, transparent, var(--accent));
+  }
+
+  .hero-divider span:last-child {
+    background: linear-gradient(90deg, var(--accent), transparent);
+  }
+
+  /* PATIENT BAND */
+  .patient-band {
+    background: linear-gradient(90deg, var(--mid-green) 0%, #388e3c 100%);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 5%;
+  }
+
+  .patient-star {
+    width: 24px;
+    height: 24px;
+    background: rgba(255, 255, 255, 0.9);
+    flex-shrink: 0;
+    clip-path: polygon(50% 0%, 59% 38%, 100% 38%, 68% 59%, 79% 100%, 50% 75%, 21% 100%, 32% 59%, 0% 38%, 41% 38%);
+  }
+
+  .patient-name {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 0.85rem;
+    color: var(--white);
+  }
+
+  .patient-label {
+    margin-left: auto;
+    font-size: 0.65rem;
+    color: rgba(255, 255, 255, 0.7);
+    background: rgba(0, 0, 0, 0.15);
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+
+  /* BODY PRINCIPAL */
+  .main-layout {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: #f0f5f0;
+    min-height: 0;
+  }
+
+  /* SECTION HAUTE : repas + photos principales */
+  .top-section {
+    display: flex;
+    flex: 2;
+    min-height: 0;
+  }
+
+  .left {
+    flex: 1;
+    padding: 18px 5%;
+    border-right: 1px solid #d4e2d4;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: auto;
+  }
+
+  /* MEALS CARDS */
+  .meal-card {
+    background: var(--white);
+    border-radius: 10px;
+    padding: 12px 15px;
+    box-shadow: var(--card-shadow);
+    border-left: 4px solid var(--accent);
+  }
+
+  .meal-card:nth-child(1) { border-left-color: #ff8f00; }
+  .meal-card:nth-child(2) { border-left-color: #43a047; }
+  .meal-card:nth-child(3) { border-left-color: #1565c0; }
+  .meal-card:nth-child(4) { border-left-color: #e53935; }
+  .meal-card:nth-child(5) { border-left-color: var(--dark-green); }
+
+  .meal-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+
+  .meal-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 0.8rem;
+    color: var(--white);
+    flex-shrink: 0;
+  }
+
+  .meal-card:nth-child(1) .meal-num { background: #ff8f00; }
+  .meal-card:nth-child(2) .meal-num { background: #43a047; }
+  .meal-card:nth-child(3) .meal-num { background: #1565c0; }
+  .meal-card:nth-child(4) .meal-num { background: #e53935; }
+  .meal-card:nth-child(5) .meal-num { background: var(--dark-green); }
+
+  .meal-title-group {
+    flex: 1;
+  }
+
+  .meal-title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--text);
+  }
+
+  .meal-time {
+    font-size: 0.6rem;
+    color: #888;
+  }
+
+  .meal-icon {
+    font-size: 1.2rem;
+  }
+
+  .meal-items {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .meal-items li {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    font-size: 0.75rem;
+    color: #3a3a3a;
+  }
+
+  .meal-items li::before {
+    content: '';
+    width: 4px;
+    height: 4px;
+    background: var(--accent-light);
+    border-radius: 50%;
+  }
+
+  .item-qty {
+    font-weight: 600;
+    color: #555;
+    font-size: 0.7rem;
+  }
+
+  .item-name {
+    color: #333;
+    font-size: 0.75rem;
+  }
+
+  /* PHOTOS PRINCIPALES (PETIT-DEJ, DEJEUNER, DINER) */
+  .main-photos {
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 18px 5% 18px 0;
+    background: #f0f5f0;
+  }
+
+  .photo-main {
+    position: relative;
+    overflow: hidden;
+    border-radius: 14px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    flex: 1;
+    min-height: 100px;
+  }
+
+  .photo-main img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .photo-placeholder {
+    width: 100%;
+    height: 100%;
+    min-height: 100px;
+    background: #e8f0e8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: #aaa;
+  }
+
+  .photo-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(10, 40, 10, 0.6) 0%, transparent 55%);
+    pointer-events: none;
+    border-radius: 14px;
+  }
+
+  .photo-label {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    color: var(--white);
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 10px 6px;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.6));
+    border-bottom-left-radius: 14px;
+    border-bottom-right-radius: 14px;
+  }
+
+  .num-tag {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 28px;
+    height: 28px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 0.8rem;
+    color: var(--white);
+    z-index: 2;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  }
+
+  /* SECTION BASSE : SNACKS (2 et 4) */
+  .snacks-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 3px solid #c5d9c5;
+    background: #e2ede2;
+    height: 180px;
+  }
+
+  .snack-card {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .snack-card:first-child {
+    border-right: 2px solid #c5d9c5;
+  }
+
+  .snack-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .snack-img-placeholder {
+    width: 100%;
+    height: 100%;
+    background: #d4e2d4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: #aaa;
+  }
+
+  .snack-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(10, 40, 10, 0.7) 0%, transparent 55%);
+    pointer-events: none;
+  }
+
+  .snack-label {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    color: var(--white);
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 8px;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.5));
+  }
+
+  .snack-items {
+    position: absolute;
+    bottom: 40px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    padding: 0 10px;
+  }
+
+  .snack-tag {
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+
+  /* NUTRITION BAND */
+  .nutrition-band {
+    background: #f8fbf8;
+    border-top: 1px solid #d4e2d4;
+    padding: 12px 5%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: space-around;
+  }
+
+  .nutr-item {
+    flex: 1;
+    text-align: center;
+    min-width: 70px;
+    padding: 3px 6px;
+  }
+
+  .nutr-value {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 0.85rem;
+    color: var(--mid-green);
+  }
+
+  .nutr-label {
+    font-size: 0.55rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-top: 2px;
+  }
+
+  .nutr-bar {
+    height: 2px;
+    background: #ddd;
+    border-radius: 2px;
+    margin-top: 5px;
+    overflow: hidden;
+  }
+
+  .nutr-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--accent-light), var(--accent));
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--dark-green);
+    text-align: center;
+    padding: 10px 5%;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.6rem;
+    border-top: 2px solid var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  footer .dot {
+    width: 3px;
+    height: 3px;
+    background: var(--accent);
+    border-radius: 50%;
+  }
+
+  footer strong {
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  @media print {
+    body { background: white !important; }
+    .jour-page { box-shadow: none !important; }
+  }
+</style>
+</head>
+
+<body>
+
+{% set repas_colors = ['#ff8f00', '#43a047', '#1565c0', '#e53935', '#1b4d1b'] %}
+{% set repas_icons  = ['🌅', '🥗', '🍽️', '🍊', '🌙'] %}
+{% set main_repas   = [1, 3, 5] %}
+{% set snack_repas  = [2, 4] %}
+
+{% for jour_num, jour_data in jours_data %}
+<div class="jour-page">
+
+  <div class="topbar">
+    <div class="topbar-date">{{ date_str }}</div>
+    <div class="brand">
+      <div class="brand-logo">🌿</div>
+      <div class="brand-label">
+        <strong>SANTÉ-TCHÉ</strong>
+        <span>Nutrition · Diététique</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero">
+    <div class="hero-dots"></div>
+    <div class="hero-inner">
+      <span class="star"></span>
+      <div class="day-title">{{ jour_data.nom }}</div>
+      <span class="star"></span>
+    </div>
+    <div class="menu-label">MENU JOURNALIER</div>
+    <div class="hero-divider">
+      <span></span>
+      <div class="hero-dot" style="width:6px;height:6px;background:var(--accent);border-radius:50%;"></div>
+      <div class="hero-dot" style="width:8px;height:8px;background:var(--accent-light);opacity:.7;border-radius:50%;"></div>
+      <div class="hero-dot" style="width:6px;height:6px;background:var(--accent);border-radius:50%;"></div>
+      <span></span>
+    </div>
+  </div>
+
+  <div class="patient-band">
+    <div class="patient-star"></div>
+    <div class="patient-name">{{ patient_nom }}</div>
+    <div class="patient-label">Plan personnalisé</div>
+  </div>
+
+  <div class="main-layout">
+    
+    <!-- SECTION HAUTE : 5 repas (texte) + 3 photos principales -->
+    <div class="top-section">
+      
+      <!-- GAUCHE : liste des 5 repas -->
+      <div class="left">
+        {% for r_ordre in range(1, 6) %}
+        {% set r = jour_data.repas[r_ordre|string] %}
+        {% set color = repas_colors[r_ordre - 1] %}
+        {% set icon  = repas_icons[r_ordre - 1] %}
+        <div class="meal-card">
+          <div class="meal-header">
+            <div class="meal-num" style="background:{{ color }};">{{ r_ordre }}</div>
+            <div class="meal-title-group">
+              <div class="meal-title">{{ r.nom }}</div>
+              <div class="meal-time">{{ r.heure }}</div>
+            </div>
+            <span class="meal-icon">{{ icon }}</span>
+          </div>
+          <ul class="meal-items">
+            {% for plat in r.plats %}
+            <li>
+              <span class="item-qty">{{ plat.quantite }}</span>
+              <span class="item-name">{{ plat.nom }}</span>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endfor %}
+      </div>
+
+      <!-- DROITE : photos des repas 1, 3, 5 (petit-déj, déjeuner, dîner) -->
+      <div class="main-photos">
+        {% for r_ordre in main_repas %}
+        {% set r = jour_data.repas[r_ordre|string] %}
+        {% set color = repas_colors[r_ordre - 1] %}
+        <div class="photo-main">
+          <div class="num-tag" style="background:{{ color }};">{{ r_ordre }}</div>
+          {% if r.image_path %}
+          <img src="{{ url_for('static', filename=r.image_path) }}" alt="{{ r.nom }}">
+          {% else %}
+          <div class="photo-placeholder">
+            {% if r_ordre == 1 %}🌅{% elif r_ordre == 3 %}🍽️{% else %}🌙{% endif %}
+          </div>
+          {% endif %}
+          <div class="photo-overlay"></div>
+          <div class="photo-label">{{ r.nom }}</div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- SECTION BASSE : snacks (repas 2 et 4) -->
+    <div class="snacks-section">
+      {% for r_ordre in snack_repas %}
+      {% set r = jour_data.repas[r_ordre|string] %}
+      {% set color = repas_colors[r_ordre - 1] %}
+      <div class="snack-card">
+        <div class="num-tag" style="background:{{ color }};">{{ r_ordre }}</div>
+        {% if r.image_path %}
+        <img src="{{ url_for('static', filename=r.image_path) }}" alt="{{ r.nom }}">
+        {% else %}
+        <div class="snack-img-placeholder">
+          {% if r_ordre == 2 %}🥗{% else %}🍊{% endif %}
+        </div>
+        {% endif %}
+        <div class="snack-overlay"></div>
+        <div class="snack-items">
+          {% for plat in r.plats[:2] %}
+          <span class="snack-tag">{{ plat.quantite }} {{ plat.nom[:18] }}</span>
+          {% endfor %}
+        </div>
+        <div class="snack-label">{{ r.nom }}</div>
+      </div>
+      {% endfor %}
+    </div>
+
+    
+
+    <footer>
+      <strong>SANTÉ-TCHÉ</strong>
+      <span class="dot"></span>
+      Nutrition &amp; Diététique
+      <span class="dot"></span>
+      Plan de <strong>{{ patient_nom }}</strong>
+      <span class="dot"></span>
+      {{ date_str.replace('_','/') }}
+    </footer>
+
+  </div>
+</div>
+{% endfor %}
+
+</body>
+</html>

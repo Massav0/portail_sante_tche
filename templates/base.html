@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}Santé-Tché{% endblock %}</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+{% block head %}{% endblock %}
+</head>
+<body class="app-body">
+
+{% if session.nutritionniste_id %}
+<nav class="app-nav">
+  <div class="nav-brand">
+    <span class="nav-logo">🌿</span>
+    <div>
+      <strong>SANTÉ-TCHÉ</strong>
+      <small>Nutrition · Diététique</small>
+    </div>
+  </div>
+  <div class="nav-links">
+    <a href="{{ url_for('main.dashboard') }}" class="nav-link {% if request.endpoint == 'main.dashboard' %}active{% endif %}">
+      🏠 Tableau de bord
+    </a>
+    <a href="{{ url_for('main.nouveau_patient') }}" class="nav-link">
+      ➕ Nouveau patient
+    </a>
+    <a href="{{ url_for('auth.setup') }}" class="nav-link">
+      👥 Comptes
+    </a>
+  </div>
+  <div class="nav-user">
+    <span class="nav-username">👤 {{ session.nutritionniste_nom }}</span>
+    <a href="{{ url_for('auth.logout') }}" class="btn-logout">Déconnexion</a>
+  </div>
+</nav>
+{% endif %}
+
+<main class="app-main">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-container">
+        {% for category, message in messages %}
+          <div class="flash flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+  {% block content %}{% endblock %}
+</main>
+
+{% block scripts %}{% endblock %}
+</body>
+</html>

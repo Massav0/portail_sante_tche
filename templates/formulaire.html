@@ -1,0 +1,286 @@
+{% extends "base.html" %}
+{% block title %}Saisie {{ jour_data.nom }} — Santé-Tché{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/formulaire.css') }}">
+{% endblock %}
+
+{% block content %}
+{# ── NAVIGATION JOURS ───────────────────────────────────────────────────── #}
+<div class="jour-nav">
+  {% for i, nom in enumerate(jours, 1) %}
+  <a href="{{ url_for('formulaire.saisie_jour', menu_id=menu.id, jour_num=i) }}"
+     class="jour-tab {% if i == jour_num %}active{% endif %}
+                     {% if draft.jours[i|string].repas['1'].plats %}done{% endif %}">
+    <span class="jour-tab-num">{{ i }}</span>
+    <span class="jour-tab-nom">{{ nom[:3] }}</span>
+  </a>
+  {% endfor %}
+</div>
+
+<div class="form-saisie-wrapper">
+  <div class="form-saisie-header">
+    <div>
+      <h1 class="form-titre-jour">{{ jour_data.nom }}</h1>
+      <p class="form-sous-titre">Menu de <strong>{{ menu.p_prenom }} {{ menu.p_nom }}</strong> · Semaine du {{ menu.semaine_debut }}</p>
+    </div>
+    <div class="form-header-actions">
+      <a href="{{ url_for('formulaire.apercu', menu_id=menu.id, jour_num=jour_num) }}" class="btn-secondary" target="_blank">👁 Aperçu</a>
+    </div>
+  </div>
+
+  <form method="POST" enctype="multipart/form-data" id="form-saisie">
+
+    {# ── 5 REPAS ──────────────────────────────────────────────────────────── #}
+    {% set repas_colors = ['#ff8f00','#43a047','#1565c0','#e53935','#1b4d1b'] %}
+    {% set repas_icons  = ['🌅','🥗','🍽️','🍊','🌙'] %}
+
+    {% for r_ordre in range(1, 6) %}
+    {% set r = jour_data.repas[r_ordre|string] %}
+    {% set color = repas_colors[r_ordre - 1] %}
+    {% set icon  = repas_icons[r_ordre - 1] %}
+    <div class="repas-block" data-repas="{{ r_ordre }}">
+      <div class="repas-block-header" style="border-left:5px solid {{ color }};">
+        <div class="repas-block-title">
+          <span class="repas-num" style="background:{{ color }};">{{ r_ordre }}</span>
+          <span class="repas-icon">{{ icon }}</span>
+          <div>
+            <div class="repas-name">{{ r.nom }}</div>
+            <div class="repas-time">{{ r.heure }}</div>
+          </div>
+        </div>
+        <button type="button" class="btn-reset-repas" title="Réinitialiser" onclick="resetRepas({{ r_ordre }})">🗑 Vider</button>
+      </div>
+
+      {# ── IMAGE REPAS ────────────────────────────────────────────────────── #}
+      <div class="repas-image-zone">
+        <label class="img-upload-label" for="img_{{ r_ordre }}">
+          {% if r.image_path %}
+          <img src="{{ url_for('static', filename=r.image_path) }}" class="img-preview" id="preview_{{ r_ordre }}" alt="Image repas">
+          <span class="img-replace-hint">Cliquer pour remplacer</span>
+          {% else %}
+          <div class="img-placeholder" id="placeholder_{{ r_ordre }}">
+            <span>📷</span>
+            <span>Ajouter une image <em>(obligatoire)</em></span>
+          </div>
+          <img src="" class="img-preview hidden" id="preview_{{ r_ordre }}" alt="">
+          {% endif %}
+        </label>
+        <input type="file" name="repas_{{ r_ordre }}_image" id="img_{{ r_ordre }}"
+               accept="image/*" class="img-input"
+               onchange="previewImage(this, {{ r_ordre }})">
+      </div>
+
+      {# ── LISTE DE PLATS ─────────────────────────────────────────────────── #}
+      <div class="plats-container" id="plats_{{ r_ordre }}">
+        <div class="plats-header">
+          <span class="plats-label">Plats</span>
+          <button type="button" class="btn-add-plat" onclick="addPlat({{ r_ordre }})">➕ Ajouter un plat</button>
+        </div>
+
+        <div class="plats-list" id="plats-list-{{ r_ordre }}">
+          {% if r.plats %}
+            {% for plat in r.plats %}
+            <div class="plat-row" data-index="{{ loop.index0 }}">
+              <span class="plat-drag" title="Réorganiser">⠿</span>
+              <input type="text" name="repas_{{ r_ordre }}_quantite[]"
+                     value="{{ plat.quantite }}"
+                     placeholder="Ex : 1 bol, 75 g, 125 ml"
+                     class="plat-qty">
+              <input type="text" name="repas_{{ r_ordre }}_nom[]"
+                     value="{{ plat.nom }}"
+                     placeholder="Nom du plat / aliment"
+                     class="plat-name">
+              <div class="plat-btns">
+                <button type="button" class="btn-plat-up" onclick="movePlat(this, -1)" title="Monter">↑</button>
+                <button type="button" class="btn-plat-down" onclick="movePlat(this, 1)" title="Descendre">↓</button>
+                <button type="button" class="btn-plat-del" onclick="removePlat(this)" title="Supprimer">🗑</button>
+              </div>
+            </div>
+            {% endfor %}
+          {% else %}
+            {# Ligne vide par défaut #}
+            <div class="plat-row" data-index="0">
+              <span class="plat-drag">⠿</span>
+              <input type="text" name="repas_{{ r_ordre }}_quantite[]" placeholder="Ex : 1 bol" class="plat-qty">
+              <input type="text" name="repas_{{ r_ordre }}_nom[]" placeholder="Nom du plat / aliment" class="plat-name">
+              <div class="plat-btns">
+                <button type="button" class="btn-plat-up" onclick="movePlat(this, -1)">↑</button>
+                <button type="button" class="btn-plat-down" onclick="movePlat(this, 1)">↓</button>
+                <button type="button" class="btn-plat-del" onclick="removePlat(this)">🗑</button>
+              </div>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+
+      {# ── DUPLIQUER ─────────────────────────────────────────────────────── #}
+      <div class="repas-footer">
+        <button type="button" class="btn-duplicate"
+                onclick="openDuplicate({{ r_ordre }})">
+          📋 Copier vers un autre jour
+        </button>
+      </div>
+    </div>
+    {% endfor %}
+
+    
+    {# ── ACTIONS ─────────────────────────────────────────────────────────── #}
+    <div class="form-navigation">
+      {% if jour_num > 1 %}
+      <button type="submit" name="action" value="precedent" class="btn-nav btn-prev">← {{ jours[jour_num-2] }}</button>
+      {% else %}
+      <span></span>
+      {% endif %}
+
+      <div class="form-nav-center">
+        <button type="submit" name="action" value="sauvegarder" class="btn-secondary">💾 Sauvegarder</button>
+        <button type="submit" name="action" value="apercu" class="btn-secondary">👁 Aperçu</button>
+      </div>
+
+      {% if jour_num < 7 %}
+      <button type="submit" name="action" value="suivant" class="btn-nav btn-next">{{ jours[jour_num] }} →</button>
+      {% else %}
+      <button type="submit" name="action" value="valider" class="btn-primary btn-valider">✅ Valider la semaine</button>
+      {% endif %}
+    </div>
+
+  </form>
+</div>
+
+{# ── MODAL DUPLIQUER ────────────────────────────────────────────────────── #}
+<div id="modal-duplicate" class="modal hidden">
+  <div class="modal-box">
+    <div class="modal-title">Copier le repas vers…</div>
+    <div id="modal-repas-info" class="modal-info"></div>
+    <div class="modal-grid">
+      {% for i, nom in enumerate(jours, 1) %}
+      {% if i != jour_num %}
+      <button class="btn-jour-dup" onclick="doDuplicate({{ i }})">{{ nom }}</button>
+      {% endif %}
+      {% endfor %}
+    </div>
+    <div class="modal-actions">
+      <button onclick="closeModal()" class="btn-secondary">Annuler</button>
+    </div>
+  </div>
+</div>
+<div id="modal-overlay" class="modal-overlay hidden" onclick="closeModal()"></div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+const MENU_ID = {{ menu.id }};
+const JOUR_NUM = {{ jour_num }};
+
+// ── AJOUT DE PLAT ────────────────────────────────────────────────────────────
+function addPlat(repasOrdre) {
+  const list = document.getElementById(`plats-list-${repasOrdre}`);
+  const rows = list.querySelectorAll('.plat-row');
+  const idx  = rows.length;
+  const div  = document.createElement('div');
+  div.className = 'plat-row';
+  div.dataset.index = idx;
+  div.innerHTML = `
+    <span class="plat-drag">⠿</span>
+    <input type="text" name="repas_${repasOrdre}_quantite[]" placeholder="Ex : 1 bol" class="plat-qty">
+    <input type="text" name="repas_${repasOrdre}_nom[]" placeholder="Nom du plat / aliment" class="plat-name">
+    <div class="plat-btns">
+      <button type="button" class="btn-plat-up"   onclick="movePlat(this,-1)">↑</button>
+      <button type="button" class="btn-plat-down" onclick="movePlat(this, 1)">↓</button>
+      <button type="button" class="btn-plat-del"  onclick="removePlat(this)">🗑</button>
+    </div>`;
+  list.appendChild(div);
+  div.querySelector('.plat-qty').focus();
+}
+
+// ── SUPPRIMER PLAT ───────────────────────────────────────────────────────────
+function removePlat(btn) {
+  const row  = btn.closest('.plat-row');
+  const list = row.closest('.plats-list');
+  if (list.querySelectorAll('.plat-row').length <= 1) {
+    row.querySelector('.plat-qty').value  = '';
+    row.querySelector('.plat-name').value = '';
+    return;
+  }
+  row.remove();
+}
+
+// ── MONTER / DESCENDRE ────────────────────────────────────────────────────────
+function movePlat(btn, dir) {
+  const row  = btn.closest('.plat-row');
+  const list = row.parentElement;
+  const rows = [...list.querySelectorAll('.plat-row')];
+  const idx  = rows.indexOf(row);
+  const target = rows[idx + dir];
+  if (!target) return;
+  if (dir === -1) list.insertBefore(row, target);
+  else list.insertBefore(target, row);
+}
+
+// ── VIDER UN REPAS ────────────────────────────────────────────────────────────
+function resetRepas(repasOrdre) {
+  if (!confirm('Vider tous les plats de ce repas ?')) return;
+  const list = document.getElementById(`plats-list-${repasOrdre}`);
+  list.innerHTML = `
+    <div class="plat-row" data-index="0">
+      <span class="plat-drag">⠿</span>
+      <input type="text" name="repas_${repasOrdre}_quantite[]" placeholder="Ex : 1 bol" class="plat-qty">
+      <input type="text" name="repas_${repasOrdre}_nom[]" placeholder="Nom du plat / aliment" class="plat-name">
+      <div class="plat-btns">
+        <button type="button" class="btn-plat-up" onclick="movePlat(this,-1)">↑</button>
+        <button type="button" class="btn-plat-down" onclick="movePlat(this,1)">↓</button>
+        <button type="button" class="btn-plat-del" onclick="removePlat(this)">🗑</button>
+      </div>
+    </div>`;
+}
+
+// ── APERÇU IMAGE ──────────────────────────────────────────────────────────────
+function previewImage(input, repasOrdre) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const preview = document.getElementById(`preview_${repasOrdre}`);
+    const placeholder = document.getElementById(`placeholder_${repasOrdre}`);
+    preview.src = e.target.result;
+    preview.classList.remove('hidden');
+    if (placeholder) placeholder.classList.add('hidden');
+  };
+  reader.readAsDataURL(file);
+}
+
+// ── MODAL DUPLIQUER ───────────────────────────────────────────────────────────
+let _currentRepas = null;
+function openDuplicate(repasOrdre) {
+  _currentRepas = repasOrdre;
+  const repasNames = { 1:'Petit-déjeuner',2:'Collation avant-midi',3:'Déjeuner',4:'Collation après-midi',5:'Dîner' };
+  document.getElementById('modal-repas-info').textContent = `Repas : ${repasNames[repasOrdre]}`;
+  document.getElementById('modal-duplicate').classList.remove('hidden');
+  document.getElementById('modal-overlay').classList.remove('hidden');
+}
+function closeModal() {
+  document.getElementById('modal-duplicate').classList.add('hidden');
+  document.getElementById('modal-overlay').classList.add('hidden');
+  _currentRepas = null;
+}
+async function doDuplicate(destJour) {
+  const res = await fetch(`/menu/${MENU_ID}/dupliquer`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ source_jour: JOUR_NUM, source_repas: _currentRepas, dest_jour: destJour })
+  });
+  const data = await res.json();
+  closeModal();
+  if (data.ok) alert(`✅ Repas copié vers ${['','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'][destJour]} avec succès.`);
+  else alert('Erreur : ' + data.msg);
+}
+
+// ── BARRE RANGE LABELS ────────────────────────────────────────────────────────
+document.querySelectorAll('input[type=range]').forEach(r => {
+  const span = r.nextElementSibling;
+  if (span) r.addEventListener('input', () => { span.textContent = r.value + '%'; });
+});
+</script>
+{% endblock %}

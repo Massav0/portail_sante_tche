@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}{{ patient.prenom }} {{ patient.nom }} — Santé-Tché{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div>
+    <h1>{{ patient.prenom }} {{ patient.nom }}</h1>
+    {% if patient.objectif %}<p>🎯 {{ patient.objectif }}</p>{% endif %}
+  </div>
+  <div style="display:flex;gap:10px;">
+    <a href="{{ url_for('main.editer_patient', pid=patient.id) }}" class="btn-secondary">✏️ Modifier</a>
+    <a href="{{ url_for('formulaire.nouveau_menu', pid=patient.id) }}" class="btn-primary">📋 Nouveau menu</a>
+  </div>
+</div>
+
+{% if patient.notes %}
+<div class="info-band">📝 {{ patient.notes }}</div>
+{% endif %}
+
+<h2 class="section-title">Menus créés</h2>
+
+{% if menus %}
+<div class="menus-grid">
+  {% for m in menus %}
+  <div class="menu-card-item">
+    <div class="menu-card-header">
+      <div>
+        <div class="menu-card-titre">{{ m.titre }}</div>
+        <div class="menu-card-date">Semaine du {{ m.semaine_debut }}</div>
+      </div>
+      <span class="badge badge-{{ m.statut }}">{{ m.statut }}</span>
+    </div>
+    <div class="menu-card-actions">
+      <a href="{{ url_for('formulaire.voir_menu',  menu_id=m.id, jour_num=1) }}" class="btn-sm btn-secondary">👁 Voir</a>
+      <a href="{{ url_for('formulaire.editer_menu', menu_id=m.id) }}"            class="btn-sm btn-primary">✏️ Modifier</a>
+      <a href="{{ url_for('export.pdf_jour', menu_id=m.id, jour_num=1) }}" class="btn-sm btn-secondary">📄 PDF jour</a>
+      <a href="{{ url_for('export.pdf_semaine', menu_id=m.id) }}" class="btn-sm btn-secondary">📦 PDF semaine</a>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+  <div class="empty-icon">📋</div>
+  <p>Aucun menu créé pour ce patient.</p>
+  <a href="{{ url_for('formulaire.nouveau_menu', pid=patient.id) }}" class="btn-primary">Créer le premier menu</a>
+</div>
+{% endif %}
+{% endblock %}

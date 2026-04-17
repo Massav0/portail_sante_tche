@@ -1,0 +1,167 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;500;600&display=swap');
+
+:root {
+  --dark-green:   #1b4d1b;
+  --mid-green:    #2e7d32;
+  --accent:       #4caf50;
+  --accent-light: #81c784;
+  --white:        #ffffff;
+  --light-bg:     #f0f5f0;
+  --border:       #d4e2d4;
+  --text:         #222;
+  --text-muted:   #666;
+  --danger:       #e53935;
+  --warning:      #ff8f00;
+  --info:         #1565c0;
+  --radius:       10px;
+  --shadow:       0 2px 12px rgba(27,77,27,0.12);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── BODY ────────────────────────────────────────────────────────────── */
+body { font-family: 'Open Sans', sans-serif; background: #e8ede8; color: var(--text); min-height: 100vh; }
+.login-body { background: linear-gradient(135deg, #c5d9c5 0%, #a8c5a8 100%); display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+.app-body   { background: #eef3ee; }
+
+/* ── NAV ─────────────────────────────────────────────────────────────── */
+.app-nav {
+  background: var(--dark-green);
+  display: flex; align-items: center; flex-wrap: wrap; gap: 12px;
+  padding: 0 24px;
+  border-bottom: 3px solid var(--accent);
+  position: sticky; top: 0; z-index: 100;
+}
+.nav-brand { display: flex; align-items: center; gap: 10px; color: #fff; padding: 12px 0; text-decoration: none; }
+.nav-logo  { font-size: 1.5rem; }
+.nav-brand strong { font-family: 'Montserrat', sans-serif; font-size: 0.95rem; font-weight: 800; display: block; color: #fff; }
+.nav-brand small  { font-size: 0.62rem; color: rgba(255,255,255,0.65); }
+.nav-links { display: flex; gap: 4px; flex: 1; }
+.nav-link  { color: rgba(255,255,255,0.75); text-decoration: none; padding: 14px 14px; font-size: 0.82rem; font-weight: 600; border-bottom: 3px solid transparent; transition: all .2s; white-space: nowrap; }
+.nav-link:hover, .nav-link.active { color: #fff; border-bottom-color: var(--accent); background: rgba(255,255,255,0.06); }
+.nav-user  { display: flex; align-items: center; gap: 10px; margin-left: auto; padding: 8px 0; }
+.nav-username { font-size: 0.78rem; color: rgba(255,255,255,0.8); }
+.btn-logout { background: rgba(255,255,255,0.12); color: #fff; border: 1px solid rgba(255,255,255,0.2); padding: 6px 14px; border-radius: 6px; font-size: 0.75rem; cursor: pointer; text-decoration: none; transition: background .2s; }
+.btn-logout:hover { background: rgba(255,255,255,0.22); }
+
+/* ── MAIN ────────────────────────────────────────────────────────────── */
+.app-main  { padding: 28px 32px; max-width: 1200px; margin: 0 auto; }
+
+/* ── FLASH ───────────────────────────────────────────────────────────── */
+.flash-container { margin-bottom: 20px; display: flex; flex-direction: column; gap: 8px; }
+.flash { padding: 12px 18px; border-radius: var(--radius); font-size: 0.88rem; font-weight: 500; border-left: 4px solid; }
+.flash-success { background: #e8f5e9; border-color: var(--accent); color: #1b5e20; }
+.flash-danger  { background: #ffebee; border-color: var(--danger); color: #b71c1c; }
+.flash-warning { background: #fff8e1; border-color: var(--warning); color: #e65100; }
+.flash-info    { background: #e3f2fd; border-color: var(--info); color: #0d47a1; }
+
+/* ── BOUTONS ─────────────────────────────────────────────────────────── */
+.btn-primary, .btn-secondary {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 10px 20px; border-radius: 8px; font-family: 'Montserrat', sans-serif;
+  font-size: 0.82rem; font-weight: 700; cursor: pointer; text-decoration: none;
+  border: none; transition: all .2s; white-space: nowrap;
+}
+.btn-primary   { background: var(--dark-green); color: #fff; }
+.btn-primary:hover { background: var(--mid-green); }
+.btn-secondary { background: #fff; color: var(--dark-green); border: 1.5px solid var(--border); }
+.btn-secondary:hover { background: var(--light-bg); border-color: var(--accent); }
+.btn-full      { width: 100%; justify-content: center; }
+.btn-large     { padding: 13px 28px; font-size: 0.9rem; }
+.btn-sm        { padding: 5px 12px; font-size: 0.75rem; border-radius: 6px; }
+.btn-valider   { background: var(--accent); }
+.btn-valider-final { background: #1565c0; }
+.btn-valider-final:hover { background: #0d47a1; }
+
+/* ── PAGE HEADER ─────────────────────────────────────────────────────── */
+.page-header { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px; margin-bottom: 28px; }
+.page-header h1 { font-family: 'Montserrat', sans-serif; font-size: 1.6rem; font-weight: 800; color: var(--dark-green); }
+.page-header p  { font-size: 0.88rem; color: var(--text-muted); margin-top: 4px; }
+.section-title  { font-family: 'Montserrat', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--dark-green); margin: 24px 0 14px; border-left: 4px solid var(--accent); padding-left: 12px; }
+
+/* ── FORMULAIRES ─────────────────────────────────────────────────────── */
+.form-card { background: #fff; border-radius: 14px; padding: 28px; box-shadow: var(--shadow); }
+.form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 18px; }
+.form-group label { font-size: 0.8rem; font-weight: 600; color: #444; text-transform: uppercase; letter-spacing: 0.5px; }
+.form-group input, .form-group select, .form-group textarea {
+  padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 8px;
+  font-size: 0.9rem; font-family: 'Open Sans', sans-serif; color: var(--text);
+  transition: border-color .2s; background: #fafcfa;
+}
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+  outline: none; border-color: var(--accent); background: #fff;
+}
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.form-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
+.info-band { background: #f0f5f0; border: 1px solid var(--border); border-radius: 8px; padding: 12px 18px; margin-bottom: 20px; font-size: 0.88rem; color: #444; }
+
+/* ── LOGIN ───────────────────────────────────────────────────────────── */
+.login-card { background: #fff; border-radius: 18px; padding: 40px 36px; width: 100%; max-width: 400px; box-shadow: 0 8px 40px rgba(27,77,27,0.2); }
+.login-header { text-align: center; margin-bottom: 28px; }
+.login-logo { font-size: 3rem; margin-bottom: 12px; }
+.login-header h1 { font-family: 'Montserrat', sans-serif; font-size: 1.4rem; font-weight: 900; color: var(--dark-green); letter-spacing: 2px; }
+.login-header p { font-size: 0.8rem; color: var(--text-muted); margin-top: 4px; }
+.login-footer { text-align: center; margin-top: 20px; }
+.login-footer a { font-size: 0.8rem; color: var(--mid-green); text-decoration: none; }
+.login-footer a:hover { text-decoration: underline; }
+
+/* ── DASHBOARD ───────────────────────────────────────────────────────── */
+.patients-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+.patient-card {
+  background: #fff; border-radius: 14px; padding: 18px 20px;
+  box-shadow: var(--shadow); display: flex; align-items: center; gap: 14px;
+  transition: transform .2s, box-shadow .2s;
+}
+.patient-card:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(27,77,27,0.16); }
+.patient-avatar { width: 52px; height: 52px; border-radius: 50%; background: linear-gradient(135deg, var(--accent-light), var(--accent)); display: flex; align-items: center; justify-content: center; font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 1.1rem; color: #fff; flex-shrink: 0; }
+.patient-info { flex: 1; min-width: 0; }
+.patient-name { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 0.95rem; color: var(--text); }
+.patient-objectif { font-size: 0.78rem; color: var(--text-muted); margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.patient-stats { display: flex; gap: 10px; margin-top: 6px; }
+.patient-stats span { font-size: 0.72rem; color: var(--text-muted); background: var(--light-bg); padding: 2px 8px; border-radius: 20px; }
+.patient-actions { display: flex; gap: 6px; flex-shrink: 0; }
+
+/* ── FICHE PATIENT ───────────────────────────────────────────────────── */
+.menus-grid { display: flex; flex-direction: column; gap: 12px; }
+.menu-card-item { background: #fff; border-radius: 12px; padding: 16px 20px; box-shadow: var(--shadow); }
+.menu-card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+.menu-card-titre { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1rem; color: var(--text); }
+.menu-card-date { font-size: 0.78rem; color: var(--text-muted); margin-top: 3px; }
+.menu-card-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.badge { padding: 4px 12px; border-radius: 20px; font-size: 0.72rem; font-weight: 700; font-family: 'Montserrat', sans-serif; text-transform: uppercase; letter-spacing: 0.5px; }
+.badge-brouillon { background: #fff8e1; color: #e65100; }
+.badge-validé    { background: #e8f5e9; color: #1b5e20; }
+.badge-archivé   { background: #f5f5f5; color: #757575; }
+
+/* ── EMPTY STATE ─────────────────────────────────────────────────────── */
+.empty-state { text-align: center; padding: 60px 20px; }
+.empty-icon { font-size: 3rem; margin-bottom: 16px; }
+.empty-state h2 { font-family: 'Montserrat', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--dark-green); margin-bottom: 8px; }
+.empty-state p { color: var(--text-muted); margin-bottom: 20px; }
+
+/* ── VALIDATION PAGE ─────────────────────────────────────────────────── */
+.validation-wrapper { max-width: 960px; }
+.validation-info { display: flex; align-items: center; gap: 16px; background: #e8f5e9; border: 1.5px solid var(--accent); border-radius: 12px; padding: 18px 24px; margin-bottom: 28px; }
+.validation-icon { font-size: 2rem; flex-shrink: 0; }
+.validation-info strong { font-family: 'Montserrat', sans-serif; font-size: 1rem; color: var(--dark-green); display: block; margin-bottom: 4px; }
+.validation-info p { font-size: 0.85rem; color: #444; }
+.recap-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; margin-bottom: 28px; }
+.recap-jour { background: #fff; border-radius: 10px; overflow: hidden; box-shadow: var(--shadow); }
+.recap-jour-header { background: var(--dark-green); color: #fff; padding: 10px 14px; display: flex; align-items: center; gap: 8px; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 0.9rem; }
+.recap-jour-num { width: 24px; height: 24px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 800; flex-shrink: 0; }
+.recap-repas { display: flex; justify-content: space-between; align-items: center; padding: 7px 14px; border-bottom: 0.5px solid var(--border); font-size: 0.78rem; }
+.recap-repas:last-child { border-bottom: none; }
+.recap-repas-name { display: flex; align-items: center; gap: 5px; color: var(--text); }
+.recap-repas-icon { font-size: 0.9rem; }
+.recap-plats-count { font-size: 0.7rem; color: var(--text-muted); background: var(--light-bg); padding: 2px 6px; border-radius: 10px; white-space: nowrap; }
+.recap-check { color: var(--accent); font-size: 0.8rem; }
+.recap-missing { color: var(--warning); font-size: 0.72rem; }
+.validation-actions { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+/* ── RESPONSIVE ──────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .app-main { padding: 16px; }
+  .form-row { grid-template-columns: 1fr; }
+  .nav-links { display: none; }
+  .page-header { flex-direction: column; }
+}

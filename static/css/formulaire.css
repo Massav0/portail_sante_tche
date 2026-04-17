@@ -1,0 +1,226 @@
+/* ── NAVIGATION JOURS ────────────────────────────────────────────────── */
+.jour-nav {
+  display: flex;
+  background: #fff;
+  border-bottom: 2px solid #d4e2d4;
+  overflow-x: auto;
+  position: sticky;
+  top: 59px;
+  z-index: 90;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.jour-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 18px;
+  text-decoration: none;
+  color: #888;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  border-bottom: 3px solid transparent;
+  transition: all .2s;
+  min-width: 72px;
+  position: relative;
+  white-space: nowrap;
+}
+.jour-tab:hover { background: #f0f5f0; color: #1b4d1b; }
+.jour-tab.active { color: #1b4d1b; border-bottom-color: #4caf50; background: #f8fbf8; }
+.jour-tab.done   { color: #2e7d32; }
+.jour-tab.done::after { content: '✓'; position: absolute; top: 6px; right: 8px; font-size: 0.6rem; color: #4caf50; }
+.jour-tab-num { font-size: 0.9rem; font-weight: 800; }
+.jour-tab-nom { font-size: 0.65rem; letter-spacing: 0.5px; margin-top: 1px; }
+
+/* ── WRAPPER FORMULAIRE ──────────────────────────────────────────────── */
+.form-saisie-wrapper { max-width: 900px; margin: 0 auto; padding: 24px 0 40px; }
+.form-saisie-header {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  margin-bottom: 24px; flex-wrap: wrap; gap: 12px;
+}
+.form-titre-jour { font-family: 'Montserrat', sans-serif; font-size: 2rem; font-weight: 900; color: #1b4d1b; }
+.form-sous-titre  { font-size: 0.85rem; color: #666; margin-top: 4px; }
+.form-header-actions { display: flex; gap: 8px; }
+
+/* ── BLOC REPAS ──────────────────────────────────────────────────────── */
+.repas-block {
+  background: #fff;
+  border-radius: 14px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 12px rgba(27,77,27,0.10);
+  overflow: hidden;
+  transition: box-shadow .2s;
+}
+.repas-block:hover { box-shadow: 0 4px 20px rgba(27,77,27,0.16); }
+
+.repas-block-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  background: #f8fbf8;
+  border-bottom: 1px solid #e8f0e8;
+}
+.repas-block-title { display: flex; align-items: center; gap: 12px; }
+.repas-num {
+  width: 32px; height: 32px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 0.9rem; color: #fff;
+  flex-shrink: 0;
+}
+.repas-icon  { font-size: 1.4rem; }
+.repas-name  { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1rem; color: #222; }
+.repas-time  { font-size: 0.7rem; color: #888; margin-top: 1px; }
+.btn-reset-repas {
+  background: transparent; border: 1px solid #ffcdd2; color: #e53935;
+  padding: 5px 12px; border-radius: 6px; font-size: 0.72rem; font-weight: 600;
+  cursor: pointer; transition: all .2s;
+}
+.btn-reset-repas:hover { background: #ffebee; }
+
+/* ── IMAGE UPLOAD ────────────────────────────────────────────────────── */
+.repas-image-zone { padding: 16px 20px; border-bottom: 1px solid #e8f0e8; }
+.img-upload-label {
+  display: block; cursor: pointer; border-radius: 10px; overflow: hidden;
+  max-height: 180px; position: relative;
+  border: 2px dashed #d4e2d4; transition: border-color .2s;
+}
+.img-upload-label:hover { border-color: #4caf50; }
+.img-placeholder {
+  height: 120px; display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: 8px; color: #aaa;
+  font-size: 0.85rem; background: #f8fbf8;
+}
+.img-placeholder span:first-child { font-size: 2rem; }
+.img-placeholder em { color: #e53935; font-style: normal; }
+.img-preview { width: 100%; height: 160px; object-fit: cover; display: block; }
+.img-preview.hidden { display: none; }
+.img-replace-hint {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  background: rgba(0,0,0,0.4); color: #fff; font-size: 0.85rem; font-weight: 600;
+  opacity: 0; transition: opacity .2s;
+}
+.img-upload-label:hover .img-replace-hint { opacity: 1; }
+.img-input { display: none; }
+
+/* ── LISTE PLATS ─────────────────────────────────────────────────────── */
+.plats-container { padding: 16px 20px; }
+.plats-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 12px;
+}
+.plats-label { font-family: 'Montserrat', sans-serif; font-size: 0.75rem; font-weight: 700; color: #555; text-transform: uppercase; letter-spacing: 1px; }
+.btn-add-plat {
+  background: #e8f5e9; color: #1b5e20; border: 1.5px solid #a5d6a7;
+  padding: 6px 14px; border-radius: 20px; font-size: 0.78rem; font-weight: 700;
+  cursor: pointer; transition: all .2s; font-family: 'Montserrat', sans-serif;
+}
+.btn-add-plat:hover { background: #c8e6c9; border-color: #4caf50; }
+
+.plats-list { display: flex; flex-direction: column; gap: 8px; }
+
+.plat-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  background: #f8fbf8;
+  border-radius: 8px;
+  border: 1px solid #e8f0e8;
+  transition: background .15s;
+}
+.plat-row:hover { background: #f0f5f0; }
+.plat-drag { color: #bbb; cursor: grab; font-size: 1rem; flex-shrink: 0; user-select: none; }
+.plat-qty {
+  width: 130px; flex-shrink: 0;
+  padding: 7px 10px; border: 1.5px solid #d4e2d4; border-radius: 6px;
+  font-size: 0.85rem; font-family: 'Open Sans', sans-serif; background: #fff;
+  transition: border-color .2s;
+}
+.plat-qty:focus { outline: none; border-color: #4caf50; }
+.plat-name {
+  flex: 1; min-width: 0;
+  padding: 7px 10px; border: 1.5px solid #d4e2d4; border-radius: 6px;
+  font-size: 0.85rem; font-family: 'Open Sans', sans-serif; background: #fff;
+  transition: border-color .2s;
+}
+.plat-name:focus { outline: none; border-color: #4caf50; }
+.plat-btns { display: flex; gap: 4px; flex-shrink: 0; }
+.btn-plat-up, .btn-plat-down, .btn-plat-del {
+  width: 30px; height: 30px; border-radius: 6px; border: 1px solid #e0e0e0;
+  background: #fff; cursor: pointer; font-size: 0.8rem; display: flex;
+  align-items: center; justify-content: center; transition: all .15s;
+}
+.btn-plat-up:hover, .btn-plat-down:hover { background: #e8f5e9; border-color: #4caf50; color: #1b5e20; }
+.btn-plat-del { border-color: #ffcdd2; }
+.btn-plat-del:hover { background: #ffebee; border-color: #e53935; }
+
+/* ── FOOTER REPAS ─────────────────────────────────────────────────────── */
+.repas-footer { padding: 10px 20px; background: #f8fbf8; border-top: 1px solid #e8f0e8; }
+.btn-duplicate {
+  background: transparent; border: 1px solid #d4e2d4; color: #2e7d32;
+  padding: 5px 14px; border-radius: 20px; font-size: 0.75rem; font-weight: 600;
+  cursor: pointer; transition: all .2s;
+}
+.btn-duplicate:hover { background: #e8f5e9; border-color: #4caf50; }
+
+/* ── NUTRITION ───────────────────────────────────────────────────────── */
+.nutrition-section { background: #fff; border-radius: 14px; padding: 24px; margin-bottom: 24px; box-shadow: 0 2px 12px rgba(27,77,27,0.10); }
+.nutrition-section-title { font-family: 'Montserrat', sans-serif; font-size: 0.85rem; font-weight: 700; color: #555; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 18px; border-left: 4px solid #4caf50; padding-left: 12px; }
+.nutrition-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 16px; }
+.nutrition-item { display: flex; flex-direction: column; gap: 5px; }
+.nutrition-item label { font-size: 0.72rem; font-weight: 600; color: #555; text-transform: uppercase; letter-spacing: 0.5px; }
+.nutrition-item input[type=text] { padding: 7px 10px; border: 1.5px solid #d4e2d4; border-radius: 6px; font-size: 0.85rem; background: #f8fbf8; transition: border-color .2s; }
+.nutrition-item input[type=text]:focus { outline: none; border-color: #4caf50; background: #fff; }
+.bar-label { font-size: 0.65rem; color: #aaa; margin-top: 2px; }
+.nutrition-item input[type=range] { width: 100%; accent-color: #4caf50; }
+.bar-value { font-size: 0.72rem; font-weight: 700; color: #2e7d32; text-align: right; }
+
+/* ── NAVIGATION FORMULAIRE ───────────────────────────────────────────── */
+.form-navigation {
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 12px; flex-wrap: wrap; padding: 20px 0;
+}
+.form-nav-center { display: flex; gap: 10px; }
+.btn-nav {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 22px; border-radius: 10px;
+  font-family: 'Montserrat', sans-serif; font-size: 0.85rem; font-weight: 700;
+  cursor: pointer; border: 2px solid #d4e2d4; background: #fff; color: #1b4d1b;
+  text-decoration: none; transition: all .2s;
+}
+.btn-nav:hover { background: #f0f5f0; border-color: #4caf50; }
+.btn-next { background: #1b4d1b; color: #fff; border-color: #1b4d1b; }
+.btn-next:hover { background: #2e7d32; border-color: #2e7d32; }
+
+/* ── MODAL DUPLIQUER ─────────────────────────────────────────────────── */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 200; }
+.modal {
+  position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  background: #fff; border-radius: 16px; padding: 28px;
+  min-width: 320px; max-width: 460px; width: 90%; z-index: 201;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.25);
+}
+.modal.hidden, .modal-overlay.hidden { display: none; }
+.modal-title { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 1.1rem; color: #1b4d1b; margin-bottom: 10px; }
+.modal-info  { font-size: 0.85rem; color: #666; margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid #e8f0e8; }
+.modal-grid  { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+.btn-jour-dup {
+  padding: 10px; border: 1.5px solid #d4e2d4; border-radius: 8px;
+  font-family: 'Montserrat', sans-serif; font-size: 0.82rem; font-weight: 700;
+  color: #1b4d1b; background: #f8fbf8; cursor: pointer; transition: all .2s;
+}
+.btn-jour-dup:hover { background: #e8f5e9; border-color: #4caf50; }
+.modal-actions { display: flex; justify-content: flex-end; }
+
+/* ── RESPONSIVE ──────────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .plat-qty  { width: 90px; }
+  .plat-btns { gap: 2px; }
+  .btn-plat-up, .btn-plat-down, .btn-plat-del { width: 26px; height: 26px; font-size: 0.7rem; }
+  .form-saisie-wrapper { padding: 16px 0 32px; }
+  .form-titre-jour { font-size: 1.5rem; }
+  .nutrition-grid { grid-template-columns: 1fr 1fr; }
+  .form-navigation { flex-direction: column; }
+  .form-nav-center { order: -1; width: 100%; justify-content: center; }
+}

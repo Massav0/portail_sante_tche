@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Modifier' if patient else 'Nouveau' }} patient — Santé-Tché{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>{{ 'Modifier le patient' if patient else 'Nouveau patient' }}</h1>
+  <a href="{{ url_for('main.dashboard') }}" class="btn-secondary">← Retour</a>
+</div>
+<div class="form-card" style="max-width:560px;margin:0 auto;">
+  <form method="POST">
+    <div class="form-row">
+      <div class="form-group">
+        <label>Prénom *</label>
+        <input type="text" name="prenom" required value="{{ patient.prenom if patient else '' }}" placeholder="Romaine">
+      </div>
+      <div class="form-group">
+        <label>Nom *</label>
+        <input type="text" name="nom" required value="{{ patient.nom if patient else '' }}" placeholder="KOUKPAIZAN">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Date de naissance</label>
+        <input type="date" name="date_naissance" value="{{ patient.date_naissance if patient and patient.date_naissance else '' }}">
+      </div>
+      <div class="form-group">
+        <label>Sexe</label>
+        <select name="sexe">
+          <option value="">—</option>
+          <option value="F" {{ 'selected' if patient and patient.sexe == 'F' else '' }}>Féminin</option>
+          <option value="M" {{ 'selected' if patient and patient.sexe == 'M' else '' }}>Masculin</option>
+          <option value="Autre" {{ 'selected' if patient and patient.sexe == 'Autre' else '' }}>Autre</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Objectif nutritionnel</label>
+      <input type="text" name="objectif" value="{{ patient.objectif if patient and patient.objectif else '' }}" placeholder="Ex : Perte de poids, équilibre alimentaire...">
+    </div>
+    <div class="form-group">
+      <label>Notes</label>
+      <textarea name="notes" rows="3" placeholder="Allergies, restrictions, remarques...">{{ patient.notes if patient and patient.notes else '' }}</textarea>
+    </div>
+    <div class="form-actions">
+      <a href="{{ url_for('main.dashboard') }}" class="btn-secondary">Annuler</a>
+      <button type="submit" class="btn-primary">{{ 'Enregistrer ' if patient else 'Créer le patient' }}</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

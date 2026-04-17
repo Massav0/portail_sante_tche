@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Validation du menu — Santé-Tché{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div>
+    <h1>Récapitulatif — Validation finale</h1>
+    <p>{{ menu.titre }} · Semaine du {{ menu.semaine_debut }}</p>
+  </div>
+</div>
+
+<div class="validation-wrapper">
+  <div class="validation-info">
+    <div class="validation-icon">✅</div>
+    <div>
+      <strong>Tout est prêt à être enregistré</strong>
+      <p>Vérifiez le récapitulatif ci-dessous avant de valider définitivement.</p>
+    </div>
+  </div>
+
+  <div class="recap-grid">
+    {% for i, nom in enumerate(jours, 1) %}
+    {% set j = draft.jours[i|string] %}
+    <div class="recap-jour">
+      <div class="recap-jour-header">
+        <span class="recap-jour-num">{{ i }}</span>
+        <span class="recap-jour-nom">{{ nom }}</span>
+      </div>
+      {% for r_ordre in range(1, 6) %}
+      {% set r = j.repas[r_ordre|string] %}
+      <div class="recap-repas">
+        <div class="recap-repas-name">
+          <span class="recap-repas-icon">{% if r_ordre==1 %}🌅{% elif r_ordre==2 %}🥗{% elif r_ordre==3 %}🍽️{% elif r_ordre==4 %}🍊{% else %}🌙{% endif %}</span>
+          {{ r.nom }}
+          {% if r.image_path %}
+          <span class="recap-check">📷</span>
+          {% else %}
+          <span class="recap-missing">⚠️ Sans image</span>
+          {% endif %}
+        </div>
+        <div class="recap-plats-count">{{ r.plats|length }} plat(s)</div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endfor %}
+  </div>
+
+  <form method="POST" class="validation-actions">
+    <a href="{{ url_for('formulaire.saisie_jour', menu_id=menu.id, jour_num=7) }}" class="btn-secondary btn-large">
+      ← Retour à la saisie
+    </a>
+    <button type="submit" class="btn-primary btn-large btn-valider-final">
+      ✅ Valider et enregistrer
+    </button>
+  </form>
+</div>
+{% endblock %}

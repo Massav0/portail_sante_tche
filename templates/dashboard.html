@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Tableau de bord — Santé-Tché{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div>
+    <h1>Tableau de bord</h1>
+    <p>Bonjour, {{ session.nutritionniste_nom }}</p>
+  </div>
+  <a href="{{ url_for('main.nouveau_patient') }}" class="btn-primary">➕ Nouveau patient</a>
+</div>
+
+{% if patients %}
+<div class="patients-grid">
+  {% for p in patients %}
+  <div class="patient-card">
+    <div class="patient-avatar">{{ p.prenom[0] }}{{ p.nom[0] }}</div>
+    <div class="patient-info">
+      <div class="patient-name">{{ p.prenom }} {{ p.nom }}</div>
+      {% if p.objectif %}<div class="patient-objectif">{{ p.objectif }}</div>{% endif %}
+      <div class="patient-stats">
+        <span>📋 {{ p.nb_menus }} menu(s)</span>
+      </div>
+    </div>
+    <div class="patient-actions">
+      <a href="{{ url_for('main.fiche_patient', pid=p.id) }}" class="btn-sm btn-primary">Voir</a>
+      <a href="{{ url_for('main.editer_patient', pid=p.id) }}" class="btn-sm btn-secondary">Éditer</a>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+  <div class="empty-icon">👤</div>
+  <h2>Aucun patient</h2>
+  <p>Commencez par créer votre premier patient.</p>
+  <a href="{{ url_for('main.nouveau_patient') }}" class="btn-primary">Créer un patient</a>
+</div>
+{% endif %}
+{% endblock %}

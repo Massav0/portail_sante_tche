@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Connexion — Santé-Tché</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800;900&family=Open+Sans:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="login-body">
+<div class="login-card">
+  <div class="login-header">
+    <div class="login-logo">🌿</div>
+    <h1>SANTÉ-TCHÉ</h1>
+    <p>Nutrition · Diététique</p>
+  </div>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="flash flash-{{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  <form method="POST">
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" name="email" required placeholder="votre@email.com">
+    </div>
+    <div class="form-group">
+      <label>Mot de passe</label>
+      <input type="password" name="password" required placeholder="••••••••">
+    </div>
+    <button type="submit" class="btn-primary btn-full">Se connecter</button>
+  </form>
+
+  <div class="login-footer">
+    <a href="{{ url_for('auth.setup') }}">Créer un compte nutritionniste</a>
+  </div>
+</div>
+</body>
+</html>
