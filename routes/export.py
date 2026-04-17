@@ -64,11 +64,23 @@ def _get_jour_data(cur, menu_id, jour_num):
 
 def _html_vers_pdf(html_string, format_a4=False):
     """Convertit un HTML string en PDF via Playwright sans appel réseau."""
+    import shutil
+
+    # Cherche chromium où qu'il soit installé
+    chromium_path = shutil.which("chromium") or shutil.which("chromium-browser") or shutil.which("google-chrome")
+
+    launch_options = {
+        "args": ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage"]
+    }
+
+    # Si trouvé sur le système, on l'utilise directement
+    if chromium_path:
+        launch_options["executable_path"] = chromium_path
+
     with sync_playwright() as p:
-        browser = p.chromium.launch()
+        browser = p.chromium.launch(**launch_options)
         page = browser.new_page()
 
-        # ✅ setContent au lieu de goto — pas besoin d'URL réseau
         page.set_content(html_string, wait_until="networkidle")
         page.wait_for_timeout(1500)
 
@@ -91,7 +103,6 @@ def _html_vers_pdf(html_string, format_a4=False):
 
         browser.close()
     return pdf_bytes
-
 
 # ─────────────────────────────────────────────
 # PDF D'UN JOUR
