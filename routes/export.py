@@ -1,6 +1,6 @@
 import os
 from flask import Blueprint, render_template, make_response, request
-from weasyprint import HTML, CSS
+from playwright.sync_api import sync_playwright
 from db import get_connection, dict_cursor
 
 export_bp = Blueprint('export', __name__)
