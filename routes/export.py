@@ -62,9 +62,15 @@ def _get_jour_data(cur, menu_id, jour_num):
 
 
 def _html_vers_pdf(html_string, format_a4=False):
-    """Convertit un HTML string en PDF via xhtml2pdf — 100% Python."""
     from xhtml2pdf import pisa
-    import io
+    import io, re
+
+    # Supprimer les @keyframes qui font planter xhtml2pdf
+    html_string = re.sub(r'@keyframes[^{]*\{[^{}]*\{[^}]*\}[^}]*\}', '', html_string)
+    # Supprimer aussi @import url (Google Fonts) non supporté
+    html_string = re.sub(r'@import[^;]+;', '', html_string)
+    # Supprimer animation: et transition: qui peuvent aussi poser problème
+    html_string = re.sub(r'animation:[^;]+;', '', html_string)
 
     buffer = io.BytesIO()
     pisa.CreatePDF(
