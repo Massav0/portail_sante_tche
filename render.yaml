@@ -4,7 +4,7 @@ services:
     env: python
     region: oregon
     plan: free
-    buildCommand: pip install -r requirements.txt && playwright install chromium && playwright install-deps chromium
+    buildCommand: pip install -r requirements.txt && PLAYWRIGHT_BROWSERS_PATH=/opt/render/project/playwright-browsers playwright install chromium && PLAYWRIGHT_BROWSERS_PATH=/opt/render/project/playwright-browsers playwright install-deps chromium
     startCommand: gunicorn wsgi:app --bind 0.0.0.0:$PORT --workers 2 --timeout 120
     envVars:
       - key: SECRET_KEY
@@ -13,3 +13,5 @@ services:
         value: postgresql://massavo:cMBWRTGOVir582mzuaHzUsWm7UZO5oj6@dpg-d7h802pj2pic73fvekkg-a.oregon-postgres.render.com/sante_tche
       - key: PYTHON_VERSION
         value: 3.11.0
+      - key: PLAYWRIGHT_BROWSERS_PATH
+        value: /opt/render/project/playwright-browsers
