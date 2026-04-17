@@ -63,46 +63,17 @@ def _get_jour_data(cur, menu_id, jour_num):
 
 
 def _html_vers_pdf(html_string, format_a4=False):
-    """Convertit un HTML string en PDF via Playwright sans appel réseau."""
-    import shutil
+    """Convertit un HTML string en PDF via xhtml2pdf — 100% Python."""
+    from xhtml2pdf import pisa
+    import io
 
-    # Cherche chromium où qu'il soit installé
-    chromium_path = shutil.which("chromium") or shutil.which("chromium-browser") or shutil.which("google-chrome")
-
-    launch_options = {
-        "args": ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage"]
-    }
-
-    # Si trouvé sur le système, on l'utilise directement
-    if chromium_path:
-        launch_options["executable_path"] = chromium_path
-
-    with sync_playwright() as p:
-        browser = p.chromium.launch(**launch_options)
-        page = browser.new_page()
-
-        page.set_content(html_string, wait_until="networkidle")
-        page.wait_for_timeout(1500)
-
-        if format_a4:
-            pdf_bytes = page.pdf(
-                format="A4",
-                print_background=True,
-                margin={"top": "0", "bottom": "0", "left": "0", "right": "0"},
-                prefer_css_page_size=True
-            )
-        else:
-            width  = page.evaluate("document.body.scrollWidth")
-            height = page.evaluate("document.body.scrollHeight")
-            pdf_bytes = page.pdf(
-                print_background=True,
-                width=f"{width}px",
-                height=f"{height}px",
-                margin={"top": "0", "bottom": "0", "left": "0", "right": "0"}
-            )
-
-        browser.close()
-    return pdf_bytes
+    buffer = io.BytesIO()
+    pisa.CreatePDF(
+        src=html_string,
+        dest=buffer,
+        encoding='utf-8'
+    )
+    return buffer.getvalue()
 
 # ─────────────────────────────────────────────
 # PDF D'UN JOUR
