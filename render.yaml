@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: sante-tche
+    env: python
+    region: oregon
+    plan: free
+    buildCommand: pip install -r requirements.txt && playwright install chromium && playwright install-deps chromium
+    startCommand: gunicorn wsgi:app --bind 0.0.0.0:$PORT --workers 2 --timeout 120
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        value: postgresql://massavo:cMBWRTGOVir582mzuaHzUsWm7UZO5oj6@dpg-d7h802pj2pic73fvekkg-a.oregon-postgres.render.com/sante_tche
+      - key: PYTHON_VERSION
+        value: 3.11.0
